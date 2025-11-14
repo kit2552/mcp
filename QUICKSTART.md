@@ -39,21 +39,25 @@ ANTHROPIC_API_KEY="sk-ant-your-actual-anthropic-key-here"
 
 ## Step 3: Start the Application
 
-**Mac/Linux:**
+**Option A: With Database (Full Features)**
 ```bash
-chmod +x start-local.sh
+# Mac/Linux
 ./start-local.sh
-```
 
-**Windows:**
-```bash
+# Windows
 start-local.bat
-```
 
-**Or use Docker Compose directly:**
-```bash
+# Or directly
 docker-compose up --build
 ```
+
+**Option B: Without Database (Faster, Testing Only)**
+```bash
+# Simpler setup - no MongoDB needed!
+docker-compose -f docker-compose.simple.yml up --build
+```
+
+> 💡 **Tip:** For testing agents and chat functionality, you don't need MongoDB. See [NO_DATABASE.md](NO_DATABASE.md) for details.
 
 ## Step 4: Access the Application
 
