@@ -94,6 +94,8 @@ MCP_SEARCH_SERVER_TYPE="mock"               # Options: mock, remote
 MCP_SEARCH_SERVER_URL="http://localhost:8002"
 MCP_BOOKING_SERVER_TYPE="mock"              # Options: mock, remote
 MCP_BOOKING_SERVER_URL="http://localhost:8003"
+MCP_CUSTOMER_SERVER_TYPE="mock"             # Options: mock, remote
+MCP_CUSTOMER_SERVER_URL="http://localhost:8004"
 
 # Agent Configuration
 MAX_AGENT_ITERATIONS=10
