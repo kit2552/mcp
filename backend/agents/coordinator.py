@@ -9,6 +9,7 @@ from langchain_anthropic import ChatAnthropic
 
 from agents.search_agent import SearchAgent
 from agents.booking_agent import BookingAgent
+from agents.customer_agent import CustomerAgent
 
 class AgentCoordinator:
     """Coordinates between multiple agents based on user intent"""
@@ -17,6 +18,7 @@ class AgentCoordinator:
         self.llm = self._initialize_llm()
         self.search_agent = SearchAgent(self.llm)
         self.booking_agent = BookingAgent(self.llm)
+        self.customer_agent = CustomerAgent(self.llm)
     
     def _initialize_llm(self):
         """Initialize LLM based on configuration"""
