@@ -47,6 +47,9 @@ class MockBookingServer:
     
     def create_booking(self, hotel_id: str, check_in: str, check_out: str, guest_name: str, guest_email: str, rooms: int = 1, room_type: str = "standard") -> Dict[str, Any]:
         """Create a new booking"""
+        # Ensure rooms is at least 1
+        rooms = rooms if rooms and rooms > 0 else 1
+        
         booking_id = f"booking_{uuid.uuid4().hex[:8]}"
         
         price_per_night = random.randint(100, 500)
