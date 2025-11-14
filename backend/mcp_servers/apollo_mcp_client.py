@@ -102,13 +102,32 @@ class ApolloMCPClient:
     def call_tool(self, tool_name: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """Call a specific tool on the MCP server"""
         try:
-            # Make GraphQL-style request to the tool
+            # Apollo MCP server expects GraphQL-style format
+            # Try different payload formats based on MCP spec
+            
+            # Format 1: Standard MCP format
             payload = {
-                "tool": tool_name,
-                "parameters": parameters
+                "method": "tools/call",
+                "params": {
+                    "name": tool_name,
+                    "arguments": parameters
+                }
             }
             
+            logger.info(f"Calling tool {tool_name} with payload: {payload}")
+            
             result = self._make_request("execute", method="POST", data=payload)
+            
+            # If 406 error, try alternative format
+            if result.get("status_code") == 406:
+                logger.info("Trying alternative payload format...")
+                
+                # Format 2: Simplified format
+                payload = {
+                    "tool": tool_name,
+                    "arguments": parameters
+                }
+                result = self._make_request("execute", method="POST", data=payload)
             
             return result
         
