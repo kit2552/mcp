@@ -51,6 +51,60 @@ class ApolloMCPClient:
             logger.error(f"Error making request to MCP server: {e}")
             return {"success": False, "error": str(e)}
     
+    def _try_graphql_query(self, tool_name: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
+        """Try calling tool via GraphQL query format"""
+        try:
+            # Build GraphQL query based on tool
+            if tool_name == "get_property":
+                query = """
+                query GetProperty($propertyId: String!) {
+                    getProperty(propertyId: $propertyId) {
+                        id
+                        name
+                        location
+                        amenities
+                        rating
+                    }
+                }
+                """
+            elif tool_name == "searchrates":
+                query = """
+                query SearchRates($city: String!, $checkIn: String, $checkOut: String, $guests: Int, $brands: [String]) {
+                    searchRates(city: $city, checkIn: $checkIn, checkOut: $checkOut, guests: $guests, brands: $brands) {
+                        properties {
+                            id
+                            name
+                            city
+                            rate
+                        }
+                    }
+                }
+                """
+            elif tool_name == "marketing":
+                query = """
+                query GetMarketing($propertyId: String!) {
+                    getMarketing(propertyId: $propertyId) {
+                        offers
+                        promotions
+                    }
+                }
+                """
+            else:
+                return {"success": False, "error": f"Unknown tool: {tool_name}"}
+            
+            payload = {
+                "query": query,
+                "variables": parameters
+            }
+            
+            # Try root endpoint for GraphQL
+            result = self._make_request("", method="POST", data=payload)
+            return result
+            
+        except Exception as e:
+            logger.error(f"GraphQL query error: {e}")
+            return {"success": False, "error": str(e)}
+    
     def get_available_tools(self) -> List[Dict[str, Any]]:
         """Get list of available tools from MCP server"""
         if self.tools_cache:
