@@ -73,13 +73,12 @@ class ApolloMCPClient:
     def _initialize_session(self):
         """Initialize MCP session with the server"""
         try:
-            import time
-            request_id = int(time.time() * 1000)
+            self.request_id_counter += 1
             
             # MCP initialize request
-            payload = {
+            message = {
                 "jsonrpc": "2.0",
-                "id": request_id,
+                "id": self.request_id_counter,
                 "method": "initialize",
                 "params": {
                     "protocolVersion": "2024-11-05",
@@ -96,11 +95,9 @@ class ApolloMCPClient:
             }
             
             logger.info(f"Initializing MCP session with server: {self.server_url}")
-            logger.info(f"Initialize payload: {json.dumps(payload, indent=2)}")
             
-            # Try root endpoint for initialization (MCP protocol is message-based)
-            result = self._make_request("", method="POST", data=payload)
-            logger.info(f"Initialize response: {result}")
+            # Send initialize message via HTTP streaming
+            result = self._send_message(message)
             
             if isinstance(result, dict) and "result" in result:
                 self.session_initialized = True
@@ -110,7 +107,6 @@ class ApolloMCPClient:
             else:
                 logger.warning(f"⚠️ MCP initialization did not return expected result: {result}")
                 logger.warning("Will continue with mock data fallback")
-                # Continue anyway - will fall back to mock data if needed
                 
         except Exception as e:
             logger.error(f"Failed to initialize MCP session: {e}")
