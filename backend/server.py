@@ -76,7 +76,8 @@ async def health_check():
         "llm_provider": os.getenv('LLM_PROVIDER', 'openai'),
         "mcp_servers": {
             "search": os.getenv('MCP_SEARCH_SERVER_TYPE', 'mock'),
-            "booking": os.getenv('MCP_BOOKING_SERVER_TYPE', 'mock')
+            "booking": os.getenv('MCP_BOOKING_SERVER_TYPE', 'mock'),
+            "customer": os.getenv('MCP_CUSTOMER_SERVER_TYPE', 'mock')
         }
     }
 
