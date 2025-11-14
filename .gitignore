@@ -70,4 +70,7 @@ dist/
 
 # Misc
 .env.production
-.env.development
+.env.development-e 
+# Environment files
+*.env
+*.env.*
