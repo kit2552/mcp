@@ -41,6 +41,11 @@ A sophisticated conversational AI chatbot powered by **LangGraph**, configurable
 4. **Confirm Booking**: Finalize and confirm the reservation
 5. **Format Response**: Provide confirmation details or explain issues
 
+### 👤 Customer Agent Workflow
+1. **Parse Customer Query**: Determine query type (profile, trips, rewards, or all)
+2. **Fetch Customer Data**: Query MCP customer server for requested information
+3. **Format Response**: Present customer data in natural, conversational format
+
 ## 📁 Project Structure
 
 ```
