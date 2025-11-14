@@ -145,6 +145,9 @@ async def get_mcp_servers():
 @api_router.post("/conversations", response_model=ConversationHistory)
 async def create_conversation():
     """Create a new conversation"""
+    if not mongodb_available:
+        raise HTTPException(status_code=503, detail="Database not available")
+    
     conversation = ConversationHistory()
     
     doc = conversation.model_dump()
