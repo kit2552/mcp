@@ -7,7 +7,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class ApolloMCPClient:
-    """Client for Apollo GraphQL MCP Server"""
+    """Client for Apollo GraphQL MCP Server using HTTP Streaming"""
     
     def __init__(self, server_url: str):
         self.server_url = server_url.rstrip('/')
@@ -16,6 +16,7 @@ class ApolloMCPClient:
         self.tools_cache = None
         self.session_initialized = False
         self.server_capabilities = {}
+        self.request_id_counter = 0
         
         # Suppress SSL warnings
         import warnings
