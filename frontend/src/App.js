@@ -177,6 +177,13 @@ function App() {
                       >
                         "Book hotel_1 from Jan 15 to Jan 20 for John Doe"
                       </button>
+                      <button 
+                        className="example-button"
+                        onClick={() => setInputMessage("Show me my profile and rewards for customer_1")}
+                        data-testid="example-customer-profile"
+                      >
+                        "Show me my profile and rewards for customer_1"
+                      </button>
                     </div>
                   </div>
                 </div>
