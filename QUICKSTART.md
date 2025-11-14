@@ -8,6 +8,8 @@ Get the AI Hotel Assistant running on your local machine in 5 minutes!
 ✅ Git installed
 ✅ OpenAI or Anthropic API key
 
+> **Note:** If running manually without Docker, you need Node.js 20+ (not 18)
+
 ## Step 1: Clone the Repository
 
 ```bash
