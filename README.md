@@ -1,6 +1,21 @@
 # AI Hotel Assistant with Multi-Agent System
 
-A sophisticated conversational AI chatbot powered by **LangGraph**, configurable LLMs (OpenAI/Anthropic), and Model Context Protocol (MCP) servers. This system uses multi-agent workflows to handle hotel search and booking operations.
+A sophisticated conversational AI chatbot powered by **LangGraph**, configurable LLMs (OpenAI/Anthropic), and Model Context Protocol (MCP) servers. This system uses multi-agent workflows to handle hotel search, booking, and customer service operations.
+
+## \ud83d\ude80 Quick Start
+
+**Want to run locally?** See [QUICKSTART.md](QUICKSTART.md) for a 5-minute setup guide.
+
+```bash
+# Clone and run with Docker
+git clone <your-repo>
+cd ai-hotel-assistant
+cp backend/.env.example backend/.env
+# Add your API key to backend/.env
+./start-local.sh
+```
+
+Open http://localhost:3000 and start chatting!
 
 ## 🏗️ Architecture Overview
 
