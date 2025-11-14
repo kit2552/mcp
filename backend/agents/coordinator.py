@@ -8,6 +8,7 @@ from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 
 from agents.search_agent import SearchAgent
+from agents.search_agent_apollo import SearchAgentApollo
 from agents.booking_agent import BookingAgent
 from agents.customer_agent import CustomerAgent
 
@@ -16,7 +17,15 @@ class AgentCoordinator:
     
     def __init__(self):
         self.llm = self._initialize_llm()
-        self.search_agent = SearchAgent(self.llm)
+        
+        # Use Apollo MCP server for search if configured as remote
+        search_server_type = os.getenv('MCP_SEARCH_SERVER_TYPE', 'mock')
+        if search_server_type == 'remote':
+            search_server_url = os.getenv('MCP_SEARCH_SERVER_URL')
+            self.search_agent = SearchAgentApollo(self.llm, search_server_url)
+        else:
+            self.search_agent = SearchAgent(self.llm)
+        
         self.booking_agent = BookingAgent(self.llm)
         self.customer_agent = CustomerAgent(self.llm)
     
