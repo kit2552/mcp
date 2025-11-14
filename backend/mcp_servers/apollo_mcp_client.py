@@ -92,7 +92,8 @@ class ApolloMCPClient:
             }
             
             logger.info(f"Initializing MCP session with server: {self.server_url}")
-            result = self._make_request("execute", method="POST", data=payload)
+            # Try root endpoint for initialization (MCP servers typically use root, not /execute)
+            result = self._make_request("", method="POST", data=payload)
             
             if "result" in result:
                 self.session_initialized = True
