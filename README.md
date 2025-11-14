@@ -232,8 +232,8 @@ curl -X GET "${REACT_APP_BACKEND_URL}/api/mcp-servers"
 ## 🔍 How It Works
 
 1. **User Input**: User sends a natural language query
-2. **Intent Classification**: Coordinator determines if it's search or booking
-3. **Agent Selection**: Routes to Search Agent or Booking Agent
+2. **Intent Classification**: Coordinator determines if it's search, booking, or customer query
+3. **Agent Selection**: Routes to Search Agent, Booking Agent, or Customer Agent
 4. **Workflow Execution**: 
    - Agent executes multi-step LangGraph workflow
    - Each step can call MCP server tools
