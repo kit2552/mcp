@@ -89,6 +89,7 @@ async def health_check():
     return {
         "status": "healthy",
         "agent_initialized": agent_initialized,
+        "mongodb_available": mongodb_available,
         "llm_provider": os.getenv('LLM_PROVIDER', 'openai'),
         "mcp_servers": {
             "search": os.getenv('MCP_SEARCH_SERVER_TYPE', 'mock'),
