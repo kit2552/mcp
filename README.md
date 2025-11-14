@@ -223,6 +223,12 @@ curl -X GET "${REACT_APP_BACKEND_URL}/api/mcp-servers"
 - "I want to reserve hotel_5 for 2 rooms from Feb 1 to Feb 5"
 - "Make a booking for hotel_10 with email john@example.com"
 
+### Customer Data
+- "Show me my profile and rewards for customer_1"
+- "What are my loyalty points and tier status?"
+- "Show me my upcoming trips"
+- "What vouchers do I have available?"
+
 ## 🔍 How It Works
 
 1. **User Input**: User sends a natural language query
