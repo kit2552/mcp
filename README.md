@@ -275,10 +275,36 @@ curl -X GET "${REACT_APP_BACKEND_URL}/api/mcp-servers"
 
 ## 🚀 Getting Started
 
-1. **Configure API Keys** in `/app/backend/.env`
-2. **Restart Backend**: `sudo supervisorctl restart backend`
-3. **Access Application**: Open frontend URL in browser
-4. **Start Chatting**: Try example prompts or ask your own questions
+### Local Development
+
+**See [QUICKSTART.md](QUICKSTART.md) for detailed setup instructions.**
+
+```bash
+# 1. Clone repository
+git clone <your-repo-url>
+cd ai-hotel-assistant
+
+# 2. Setup environment
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+# Edit backend/.env and add your API key
+
+# 3. Start with Docker
+docker-compose up --build
+
+# 4. Access application
+# Frontend: http://localhost:3000
+# Backend: http://localhost:8001
+# API Docs: http://localhost:8001/docs
+```
+
+### Production Deployment
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for production deployment guides (AWS, GCP, Azure).
+
+### Manual Setup (Without Docker)
+
+See [LOCAL_SETUP.md](LOCAL_SETUP.md) for detailed manual installation instructions.
 
 ## 📊 Monitoring
 
