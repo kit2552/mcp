@@ -24,16 +24,26 @@ class ApolloMCPClient:
         try:
             url = f"{self.server_url}/{endpoint}"
             
+            # Set proper headers for Apollo MCP server
+            headers = {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+            
             if method == "GET":
-                response = self.client.get(url)
+                response = self.client.get(url, headers=headers)
             elif method == "POST":
-                response = self.client.post(url, json=data, headers={"Content-Type": "application/json"})
+                response = self.client.post(url, json=data, headers=headers)
             else:
                 raise ValueError(f"Unsupported method: {method}")
             
             response.raise_for_status()
             return response.json()
         
+        except httpx.HTTPStatusError as e:
+            logger.error(f"HTTP error connecting to MCP server: {e}")
+            logger.error(f"Response content: {e.response.text if hasattr(e, 'response') else 'N/A'}")
+            return {"success": False, "error": str(e), "status_code": e.response.status_code if hasattr(e, 'response') else None}
         except httpx.HTTPError as e:
             logger.error(f"HTTP error connecting to MCP server: {e}")
             return {"success": False, "error": str(e)}
