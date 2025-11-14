@@ -119,5 +119,10 @@ class AgentCoordinator:
                 "type": os.getenv('MCP_BOOKING_SERVER_TYPE', 'mock'),
                 "url": os.getenv('MCP_BOOKING_SERVER_URL'),
                 "tools": self.booking_agent.mcp_server.get_available_tools()
+            },
+            "customer_server": {
+                "type": os.getenv('MCP_CUSTOMER_SERVER_TYPE', 'mock'),
+                "url": os.getenv('MCP_CUSTOMER_SERVER_URL'),
+                "tools": self.customer_agent.mcp_server.get_available_tools()
             }
         }
