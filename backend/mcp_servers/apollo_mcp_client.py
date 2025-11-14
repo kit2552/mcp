@@ -255,19 +255,29 @@ class ApolloMCPClient:
             
             result = self._make_request("execute", method="POST", data=payload)
             
-            # Check for JSON-RPC error response
-            if "error" in result:
-                logger.error(f"JSON-RPC error: {result['error']}")
+            # Handle error responses
+            if isinstance(result, dict):
+                # Check for JSON-RPC error response
+                if "error" in result:
+                    error_msg = result["error"].get("message", str(result["error"])) if isinstance(result["error"], dict) else str(result["error"])
+                    logger.error(f"JSON-RPC error: {error_msg}")
+                    return {
+                        "success": False,
+                        "error": error_msg
+                    }
+                
+                # Extract result from JSON-RPC response
+                if "result" in result:
+                    return result["result"]
+                
+                return result
+            else:
+                # Non-dict response (error string)
+                logger.error(f"Unexpected response type: {type(result)}")
                 return {
                     "success": False,
-                    "error": result["error"].get("message", str(result["error"]))
+                    "error": str(result)
                 }
-            
-            # Extract result from JSON-RPC response
-            if "result" in result:
-                return result["result"]
-            
-            return result
         
         except Exception as e:
             logger.error(f"Error calling tool {tool_name}: {e}")
