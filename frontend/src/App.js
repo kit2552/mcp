@@ -53,7 +53,8 @@ function App() {
       const response = await axios.post(`${API}/conversations`);
       setConversationId(response.data.id);
     } catch (error) {
-      console.error("Failed to create conversation:", error);
+      // Database not available - chat will work without conversation history
+      console.log("Conversation history not available (database offline)");
     }
   };
 
