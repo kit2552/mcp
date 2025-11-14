@@ -66,6 +66,46 @@ class ApolloMCPClient:
             logger.error(f"Error making request to MCP server: {e}")
             return {"success": False, "error": str(e)}
     
+    def _initialize_session(self):
+        """Initialize MCP session with the server"""
+        try:
+            import time
+            request_id = int(time.time() * 1000)
+            
+            # MCP initialize request
+            payload = {
+                "jsonrpc": "2.0",
+                "id": request_id,
+                "method": "initialize",
+                "params": {
+                    "protocolVersion": "2024-11-05",
+                    "capabilities": {
+                        "roots": {
+                            "listChanged": True
+                        }
+                    },
+                    "clientInfo": {
+                        "name": "ai-hotel-assistant",
+                        "version": "1.0.0"
+                    }
+                }
+            }
+            
+            logger.info(f"Initializing MCP session with server: {self.server_url}")
+            result = self._make_request("execute", method="POST", data=payload)
+            
+            if "result" in result:
+                self.session_initialized = True
+                self.server_capabilities = result.get("result", {}).get("capabilities", {})
+                logger.info(f"MCP session initialized. Server capabilities: {self.server_capabilities}")
+            else:
+                logger.warning(f"MCP initialization response: {result}")
+                # Continue anyway - will fall back to mock data if needed
+                
+        except Exception as e:
+            logger.error(f"Failed to initialize MCP session: {e}")
+            # Don't raise - we'll fall back to mock data
+    
     def _parse_sse_response(self, sse_text: str) -> Dict[str, Any]:
         """Parse Server-Sent Events (SSE) response"""
         try:
