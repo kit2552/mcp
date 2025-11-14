@@ -132,11 +132,22 @@ class MockBookingServer:
     
     def _calculate_nights(self, check_in: str, check_out: str) -> int:
         """Calculate number of nights between dates"""
+        if not check_in or not check_out:
+            return 1
         try:
-            start = datetime.fromisoformat(check_in.replace('Z', '+00:00'))
-            end = datetime.fromisoformat(check_out.replace('Z', '+00:00'))
+            # Handle various date formats
+            if 'T' in check_in:
+                start = datetime.fromisoformat(check_in.replace('Z', '+00:00'))
+            else:
+                start = datetime.strptime(check_in, '%Y-%m-%d')
+            
+            if 'T' in check_out:
+                end = datetime.fromisoformat(check_out.replace('Z', '+00:00'))
+            else:
+                end = datetime.strptime(check_out, '%Y-%m-%d')
+            
             return max(1, (end - start).days)
-        except:
+        except Exception as e:
             return 1
     
     def get_available_tools(self) -> List[Dict[str, Any]]:
