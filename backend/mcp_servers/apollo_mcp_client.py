@@ -190,11 +190,15 @@ class ApolloMCPClient:
     def call_tool(self, tool_name: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """Call a specific tool on the MCP server"""
         try:
-            # Apollo MCP server expects GraphQL-style format
-            # Try different payload formats based on MCP spec
+            # MCP server uses JSON-RPC 2.0 protocol
+            # Generate unique request ID
+            import time
+            request_id = int(time.time() * 1000)
             
-            # Format 1: Standard MCP format
+            # JSON-RPC 2.0 format
             payload = {
+                "jsonrpc": "2.0",
+                "id": request_id,
                 "method": "tools/call",
                 "params": {
                     "name": tool_name,
@@ -202,25 +206,21 @@ class ApolloMCPClient:
                 }
             }
             
-            logger.info(f"Calling tool {tool_name} with payload: {payload}")
+            logger.info(f"Calling tool {tool_name} with JSON-RPC payload: {payload}")
             
             result = self._make_request("execute", method="POST", data=payload)
             
-            # If 406 error, try alternative formats
-            if result.get("status_code") == 406:
-                logger.info("Trying alternative payload format...")
-                
-                # Format 2: Simplified format
-                payload = {
-                    "tool": tool_name,
-                    "arguments": parameters
+            # Check for JSON-RPC error response
+            if "error" in result:
+                logger.error(f"JSON-RPC error: {result['error']}")
+                return {
+                    "success": False,
+                    "error": result["error"].get("message", str(result["error"]))
                 }
-                result = self._make_request("execute", method="POST", data=payload)
-                
-                # If still 406, try GraphQL format
-                if result.get("status_code") == 406:
-                    logger.info("Trying GraphQL query format...")
-                    result = self._try_graphql_query(tool_name, parameters)
+            
+            # Extract result from JSON-RPC response
+            if "result" in result:
+                return result["result"]
             
             return result
         
