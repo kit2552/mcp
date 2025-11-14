@@ -25,36 +25,39 @@ class ApolloMCPClient:
         # Initialize the MCP session
         self._initialize_session()
     
-    def _make_request(self, endpoint: str, method: str = "GET", data: Dict = None) -> Dict[str, Any]:
-        """Make HTTP request to MCP server"""
+    def _send_message(self, message: Dict[str, Any]) -> Dict[str, Any]:
+        """Send JSON-RPC message via HTTP streaming to MCP server"""
         try:
-            url = f"{self.server_url}/{endpoint}"
+            # All messages go to root endpoint (not /execute)
+            url = self.server_url
             
-            # Set proper headers for Apollo MCP server
-            # Server requires both application/json AND text/event-stream
+            # MCP uses HTTP streaming protocol
             headers = {
                 "Content-Type": "application/json",
-                "Accept": "application/json, text/event-stream"
+                "Accept": "application/json"
             }
             
-            if method == "GET":
-                response = self.client.get(url, headers=headers)
-            elif method == "POST":
-                response = self.client.post(url, json=data, headers=headers)
-            else:
-                raise ValueError(f"Unsupported method: {method}")
+            logger.info(f"Sending message to {url}: {message}")
             
-            response.raise_for_status()
-            
-            # Check content type - might be JSON or SSE
-            content_type = response.headers.get("content-type", "")
-            
-            if "text/event-stream" in content_type:
-                # Handle SSE response - parse the stream
-                return self._parse_sse_response(response.text)
-            else:
-                # Regular JSON response
-                return response.json()
+            # Send as streaming POST
+            with self.client.stream("POST", url, json=message, headers=headers) as response:
+                response.raise_for_status()
+                
+                # Read streaming response
+                result = None
+                for line in response.iter_lines():
+                    if line.strip():
+                        try:
+                            result = json.loads(line)
+                            logger.info(f"Received: {result}")
+                        except json.JSONDecodeError:
+                            logger.warning(f"Could not parse line: {line}")
+                            continue
+                
+                if result:
+                    return result
+                else:
+                    return {"success": False, "error": "No response from server"}
         
         except httpx.HTTPStatusError as e:
             logger.error(f"HTTP error connecting to MCP server: {e}")
@@ -64,7 +67,7 @@ class ApolloMCPClient:
             logger.error(f"HTTP error connecting to MCP server: {e}")
             return {"success": False, "error": str(e)}
         except Exception as e:
-            logger.error(f"Error making request to MCP server: {e}")
+            logger.error(f"Error sending message to MCP server: {e}")
             return {"success": False, "error": str(e)}
     
     def _initialize_session(self):
