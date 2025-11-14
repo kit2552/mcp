@@ -172,7 +172,7 @@ class ApolloMCPClient:
             
             result = self._make_request("execute", method="POST", data=payload)
             
-            # If 406 error, try alternative format
+            # If 406 error, try alternative formats
             if result.get("status_code") == 406:
                 logger.info("Trying alternative payload format...")
                 
@@ -182,6 +182,11 @@ class ApolloMCPClient:
                     "arguments": parameters
                 }
                 result = self._make_request("execute", method="POST", data=payload)
+                
+                # If still 406, try GraphQL format
+                if result.get("status_code") == 406:
+                    logger.info("Trying GraphQL query format...")
+                    result = self._try_graphql_query(tool_name, parameters)
             
             return result
         
