@@ -8,6 +8,7 @@ A sophisticated conversational AI chatbot powered by **LangGraph**, configurable
 - **Coordinator Agent**: Routes user queries to appropriate specialized agents
 - **Search Agent**: Handles hotel search operations via MCP search server
 - **Booking Agent**: Manages hotel bookings via MCP booking server
+- **Customer Agent**: Retrieves customer profile, trips, and rewards data via MCP customer server
 
 ### Technology Stack
 - **Backend**: FastAPI (Python)
