@@ -118,11 +118,19 @@ class AgentCoordinator:
     
     def get_mcp_server_info(self) -> Dict[str, Any]:
         """Get information about connected MCP servers"""
+        # Get search agent tools based on type
+        search_server_type = os.getenv('MCP_SEARCH_SERVER_TYPE', 'mock')
+        if search_server_type == 'remote' and hasattr(self.search_agent, 'get_mcp_server'):
+            search_tools = self.search_agent.get_mcp_server().get_available_tools()
+        else:
+            search_tools = self.search_agent.mcp_server.get_available_tools()
+        
         return {
             "search_server": {
-                "type": os.getenv('MCP_SEARCH_SERVER_TYPE', 'mock'),
+                "type": search_server_type,
                 "url": os.getenv('MCP_SEARCH_SERVER_URL'),
-                "tools": self.search_agent.mcp_server.get_available_tools()
+                "tools": search_tools,
+                "implementation": "apollo_graphql" if search_server_type == 'remote' else "mock"
             },
             "booking_server": {
                 "type": os.getenv('MCP_BOOKING_SERVER_TYPE', 'mock'),
