@@ -25,9 +25,10 @@ class ApolloMCPClient:
             url = f"{self.server_url}/{endpoint}"
             
             # Set proper headers for Apollo MCP server
+            # Server requires both application/json AND text/event-stream
             headers = {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
+                "Accept": "application/json, text/event-stream"
             }
             
             if method == "GET":
