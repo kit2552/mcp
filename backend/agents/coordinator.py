@@ -85,9 +85,10 @@ class AgentCoordinator:
         Classify the user's message into one of these intents:
         - 'search': User wants to search for hotels, get hotel information, or browse options
         - 'booking': User wants to book a hotel, make a reservation, or confirm a booking
+        - 'customer': User wants to view their profile, check trip history, see rewards/points, loyalty status, or vouchers
         - 'general': General queries or greetings
         
-        Respond with ONLY one word: search, booking, or general"""
+        Respond with ONLY one word: search, booking, customer, or general"""
         
         messages = [
             SystemMessage(content=system_prompt),
@@ -101,6 +102,8 @@ class AgentCoordinator:
             return 'search'
         elif 'book' in intent:
             return 'booking'
+        elif 'customer' in intent:
+            return 'customer'
         else:
             return 'general'
     
