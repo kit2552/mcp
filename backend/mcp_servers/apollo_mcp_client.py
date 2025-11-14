@@ -39,7 +39,16 @@ class ApolloMCPClient:
                 raise ValueError(f"Unsupported method: {method}")
             
             response.raise_for_status()
-            return response.json()
+            
+            # Check content type - might be JSON or SSE
+            content_type = response.headers.get("content-type", "")
+            
+            if "text/event-stream" in content_type:
+                # Handle SSE response - parse the stream
+                return self._parse_sse_response(response.text)
+            else:
+                # Regular JSON response
+                return response.json()
         
         except httpx.HTTPStatusError as e:
             logger.error(f"HTTP error connecting to MCP server: {e}")
