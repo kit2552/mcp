@@ -241,15 +241,12 @@ class ApolloMCPClient:
     def call_tool(self, tool_name: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """Call a specific tool on the MCP server"""
         try:
-            # MCP server uses JSON-RPC 2.0 protocol
-            # Generate unique request ID
-            import time
-            request_id = int(time.time() * 1000)
+            self.request_id_counter += 1
             
-            # JSON-RPC 2.0 format
-            payload = {
+            # JSON-RPC 2.0 format for tool call
+            message = {
                 "jsonrpc": "2.0",
-                "id": request_id,
+                "id": self.request_id_counter,
                 "method": "tools/call",
                 "params": {
                     "name": tool_name,
@@ -257,9 +254,10 @@ class ApolloMCPClient:
                 }
             }
             
-            logger.info(f"Calling tool {tool_name} with JSON-RPC payload: {payload}")
+            logger.info(f"Calling tool {tool_name} with arguments: {parameters}")
             
-            result = self._make_request("execute", method="POST", data=payload)
+            # Send via HTTP streaming (not /execute endpoint)
+            result = self._send_message(message)
             
             # Handle error responses
             if isinstance(result, dict):
