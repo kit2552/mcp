@@ -161,6 +161,9 @@ async def create_conversation():
 @api_router.get("/conversations/{conversation_id}", response_model=ConversationHistory)
 async def get_conversation(conversation_id: str):
     """Get conversation history"""
+    if not mongodb_available:
+        raise HTTPException(status_code=503, detail="Database not available")
+    
     conversation = await db.conversations.find_one({"id": conversation_id}, {"_id": 0})
     
     if not conversation:
