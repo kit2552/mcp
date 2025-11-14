@@ -11,8 +11,13 @@ class ApolloMCPClient:
     
     def __init__(self, server_url: str):
         self.server_url = server_url.rstrip('/')
-        self.client = httpx.Client(timeout=30.0)
+        # Disable SSL verification for internal/dev servers
+        self.client = httpx.Client(timeout=30.0, verify=False)
         self.tools_cache = None
+        
+        # Suppress SSL warnings
+        import warnings
+        warnings.filterwarnings('ignore', message='Unverified HTTPS request')
     
     def _make_request(self, endpoint: str, method: str = "GET", data: Dict = None) -> Dict[str, Any]:
         """Make HTTP request to MCP server"""
