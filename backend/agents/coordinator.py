@@ -67,11 +67,15 @@ class AgentCoordinator:
             result = await self.booking_agent.process(user_message)
             return result
         
+        elif intent == 'customer':
+            result = await self.customer_agent.process(user_message)
+            return result
+        
         else:
             # General response
             return {
                 "agent": "coordinator",
-                "response": "I can help you search for hotels or make bookings. What would you like to do?",
+                "response": "I can help you search for hotels, make bookings, or access your customer profile, trips, and rewards. What would you like to do?",
                 "intent": "general"
             }
     
