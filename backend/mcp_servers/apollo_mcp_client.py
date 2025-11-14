@@ -61,6 +61,30 @@ class ApolloMCPClient:
             logger.error(f"Error making request to MCP server: {e}")
             return {"success": False, "error": str(e)}
     
+    def _parse_sse_response(self, sse_text: str) -> Dict[str, Any]:
+        """Parse Server-Sent Events (SSE) response"""
+        try:
+            # SSE format: data: {...}\n\n
+            lines = sse_text.strip().split('\n')
+            result_data = {}
+            
+            for line in lines:
+                if line.startswith('data: '):
+                    data_str = line[6:]  # Remove 'data: ' prefix
+                    try:
+                        result_data = json.loads(data_str)
+                    except json.JSONDecodeError:
+                        continue
+            
+            if result_data:
+                return result_data
+            else:
+                return {"success": False, "error": "No valid data in SSE stream"}
+        
+        except Exception as e:
+            logger.error(f"Error parsing SSE response: {e}")
+            return {"success": False, "error": f"SSE parse error: {str(e)}"}
+    
     def _try_graphql_query(self, tool_name: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """Try calling tool via GraphQL query format"""
         try:
