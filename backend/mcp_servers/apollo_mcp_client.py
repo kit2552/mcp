@@ -14,10 +14,15 @@ class ApolloMCPClient:
         # Disable SSL verification for internal/dev servers
         self.client = httpx.Client(timeout=30.0, verify=False)
         self.tools_cache = None
+        self.session_initialized = False
+        self.server_capabilities = {}
         
         # Suppress SSL warnings
         import warnings
         warnings.filterwarnings('ignore', message='Unverified HTTPS request')
+        
+        # Initialize the MCP session
+        self._initialize_session()
     
     def _make_request(self, endpoint: str, method: str = "GET", data: Dict = None) -> Dict[str, Any]:
         """Make HTTP request to MCP server"""
