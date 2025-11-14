@@ -181,6 +181,9 @@ async def get_conversation(conversation_id: str):
 
 async def _save_message(conversation_id: str, content: str, role: str, agent: str = None):
     """Helper to save message to conversation"""
+    if not mongodb_available:
+        return
+    
     message = ChatMessage(role=role, content=content, agent=agent)
     message_dict = message.model_dump()
     message_dict['timestamp'] = message_dict['timestamp'].isoformat()
