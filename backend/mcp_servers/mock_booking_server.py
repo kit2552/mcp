@@ -14,6 +14,9 @@ class MockBookingServer:
     
     def check_availability(self, hotel_id: str, check_in: str, check_out: str, rooms: int = 1, room_type: str = "standard") -> Dict[str, Any]:
         """Check room availability for specific dates"""
+        # Ensure rooms is at least 1
+        rooms = rooms if rooms and rooms > 0 else 1
+        
         # Simulate availability check
         is_available = random.choice([True, True, True, False])  # 75% available
         
@@ -27,6 +30,7 @@ class MockBookingServer:
         
         available_rooms = random.randint(1, 10)
         price_per_night = random.randint(100, 500)
+        total_nights = self._calculate_nights(check_in, check_out)
         
         return {
             "success": True,
@@ -35,8 +39,8 @@ class MockBookingServer:
             "room_type": room_type,
             "available_rooms": available_rooms,
             "price_per_night": price_per_night,
-            "total_nights": self._calculate_nights(check_in, check_out),
-            "total_price": price_per_night * self._calculate_nights(check_in, check_out) * rooms,
+            "total_nights": total_nights,
+            "total_price": price_per_night * total_nights * rooms,
             "check_in": check_in,
             "check_out": check_out
         }
