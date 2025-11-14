@@ -17,10 +17,26 @@ from agents.coordinator import AgentCoordinator
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+# MongoDB connection (optional)
+mongo_url = os.environ.get('MONGO_URL')
+if mongo_url:
+    try:
+        client = AsyncIOMotorClient(mongo_url, serverSelectionTimeoutMS=5000)
+        db = client[os.environ.get('DB_NAME', 'hotel_assistant_db')]
+        # Test connection
+        client.server_info()
+        mongodb_available = True
+        logging.info("MongoDB connected successfully")
+    except Exception as e:
+        logging.warning(f"MongoDB connection failed: {e}. Running without database.")
+        client = None
+        db = None
+        mongodb_available = False
+else:
+    client = None
+    db = None
+    mongodb_available = False
+    logging.info("MongoDB not configured. Running without database.")
 
 # Create the main app without a prefix
 app = FastAPI()
