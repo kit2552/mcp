@@ -57,10 +57,12 @@ A sophisticated conversational AI chatbot powered by **LangGraph**, configurable
 │   ├── agents/
 │   │   ├── coordinator.py                  # Coordinator agent
 │   │   ├── search_agent.py                 # Search agent with LangGraph
-│   │   └── booking_agent.py                # Booking agent with LangGraph
+│   │   ├── booking_agent.py                # Booking agent with LangGraph
+│   │   └── customer_agent.py               # Customer agent with LangGraph
 │   └── mcp_servers/
 │       ├── mock_search_server.py           # Mock hotel search MCP server
-│       └── mock_booking_server.py          # Mock hotel booking MCP server
+│       ├── mock_booking_server.py          # Mock hotel booking MCP server
+│       └── mock_customer_server.py         # Mock customer data MCP server
 ├── frontend/
 │   ├── src/
 │   │   ├── App.js                          # Main React component
