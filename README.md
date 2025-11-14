@@ -135,6 +135,12 @@ AGENT_TEMPERATURE=0.7
 - `cancel_booking`: Cancel existing booking
 - `get_booking_details`: Retrieve booking information
 
+**Customer Server Tools:**
+- `get_customer_profile`: Get customer profile by ID or email
+- `get_customer_trips`: Get trip history (completed, upcoming, all)
+- `get_customer_rewards`: Get loyalty points, tier, benefits, vouchers
+- `update_customer_profile`: Update customer preferences and information
+
 ### Configuring Remote MCP Servers
 
 To connect to remote MCP servers, update `.env`:
