@@ -113,6 +113,24 @@ docker-compose down
 
 ## Troubleshooting
 
+### Node Version Error
+
+**Error:** `The engine "node" is incompatible with this module. Expected version ">=20.0.0"`
+
+**Solution:** The frontend requires Node.js 20+. Update your Dockerfile or local Node installation:
+
+```bash
+# Check Node version
+node --version
+
+# If using Docker, the Dockerfile should have:
+FROM node:20-alpine  # NOT node:18-alpine
+
+# If running manually, install Node 20+:
+# Mac: brew install node@20
+# Ubuntu: Use nvm or NodeSource
+```
+
 ### Port Already in Use
 
 If you get port conflicts:
