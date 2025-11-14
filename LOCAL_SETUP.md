@@ -10,8 +10,8 @@ This guide will help you run the AI Hotel Assistant application on your local ma
 
 ### Option 2: Manual Setup
 - Python 3.11+
-- Node.js 18+
-- MongoDB 7.0+
+- Node.js 20+ (required for react-router-dom v7)
+- MongoDB 7.0+ (optional)
 - yarn package manager
 
 ## Quick Start with Docker
