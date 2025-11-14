@@ -30,6 +30,7 @@ function App() {
 
   useEffect(() => {
     checkSystemHealth();
+    // Only create conversation if database is available
     createConversation();
   }, []);
 
