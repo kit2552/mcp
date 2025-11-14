@@ -119,8 +119,8 @@ async def chat(request: ChatRequest):
             }
         )
         
-        # Store conversation in database if conversation_id provided
-        if request.conversation_id:
+        # Store conversation in database if conversation_id provided and MongoDB is available
+        if request.conversation_id and mongodb_available:
             await _save_message(request.conversation_id, request.message, "user")
             await _save_message(request.conversation_id, result['response'], "assistant", result['agent'])
         
